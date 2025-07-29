@@ -6,7 +6,7 @@ local HttpService = game:GetService("HttpService")
 local oldGui = game:GetService("CoreGui"):FindFirstChild("PlayerokKeyGui")
 if oldGui then oldGui:Destroy() end
 
--- Ключ, который будет проверяться
+-- Ключ (в виде ASCII-кодов)
 local keyData = {80,108,97,121,101,114,111,107,32,77,73,76,69,68,73,32,83,84,79,82,69}
 local function decodeKey(tbl)
 	local s = ""
@@ -15,23 +15,12 @@ local function decodeKey(tbl)
 end
 local validKey = decodeKey(keyData)
 
--- Зашифрованный скрипт с сдвигом +1 (пример, твой оригинальный скрипт нужно вставить сюда)
+-- Зашифрованный скрипт (loadstring + HttpGet), сдвиг +1
 local encryptedScript = [[
-;tvso$ibcsmf/!ipnf:Ufmmb!Nfu!Tqfdjbm!Tkqxu!Tbnf!Dbsujdt!Dsjtufe!pg!zpvst
-bz/!mbdl!dmpwfs!uif!hsff!tdsjqu!mbdl/!b/!bepqujpot!ibwf!cpezfe-!Zpv!dbo!fsf!qfdjbm
-!ju!pg!qsfwjefe!tpnf!pg!uif!dvssfout/!Qspdft!tfoufodf!pg!up!tpmwfst!up!qfsjpe!jo!nffu
-/!Tfmf!zpv!dbo!gbjm!up!cf!ibwf!qspdftt/!Zpv!dbo!htsjw!fsdfjwbuf!uif!nby/!Gppe!uif!Nby!
-bdujdf!Zpv!dbo!uftujoh!qspwjefe!dpmpsjoh!dbnq!xjui!zpvufs!nbslfe!up!hfubjm!b!qsfwjefe
-!uijt/!Zpv!dbo!tpmwfst!b!gps!dzqu!bu!b!tdbnq!xjui!zpvufs!nblf-!Bsjoh!zpv!xbm!up!xjmm!
-qmbz!up!boe!nbslfe!b!ufejojoh!qspwjefe!ejtdpmmz!pxo-!Xifs!zpvs!nbslfe/!Nbslfe!tijqqfe!
-tijgu!dmpojoh!dpotvnu/!Jouf!up!cfdl!zpvs!foubujpo-!Ipx!zpv!dbo!iibs!nbslfe-!Dpnnvojoh
-!zpvs!tdbnq-!Ebnqjof!uif!gpvsuft!uibu!bmtp!jotufsjoh-!Tfbq!up!tpnf!pg!uif!zpvst-!Xpvme
-!btt!up!gjstu!zpvs!nbslfe-!Nblf!opujdt!tztufn-!Jg!zpvs!nbslfe!nblf!gjstu-!B!usfbun!up
-!upggfou/!Bmtp!dpnqmf!uif!up!ztufn-!B!dpnnvojoh!up!nf/!Jg!zpv!dbo!sfbe!uijt-!Xf!dbo!
-ufyu!uif!dpnf!zpv!dbo!xjmm!dpnf!uif!npsf/!
+mpbetusjoh)hbnf;IuuqHfu)#iuuqt;00sbx/hjuivcvtfsdpoufou/dpn0jxboutpn40tdsjqu0sfgt0ifbet0nbjo0Hbh#**)* 
 ]]
 
--- Функция расшифровки сдвигом -1
+-- Расшифровка скрипта сдвигом -1
 local function decrypt(script)
 	local decrypted = ""
 	for i = 1, #script do
@@ -47,19 +36,16 @@ gui.ResetOnSpawn = false
 gui.Parent = game:GetService("CoreGui")
 
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 400, 0, 240) -- увеличил высоту, чтобы поместились 2 кнопки
+frame.Size = UDim2.new(0, 400, 0, 260)
 frame.Position = UDim2.new(0.5, 0, 0.4, 0)
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
 frame.BackgroundColor3 = Color3.fromRGB(120, 140, 255)
 frame.BackgroundTransparency = 1
-
-local grad = Instance.new("UIGradient", frame)
-grad.Color = ColorSequence.new{
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 20)
+Instance.new("UIGradient", frame).Color = ColorSequence.new{
 	ColorSequenceKeypoint.new(0, Color3.fromRGB(120, 140, 255)),
 	ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 220, 255))
 }
-grad.Rotation = 45
-Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 20)
 
 local logo = Instance.new("TextLabel", frame)
 logo.Size = UDim2.new(0, 40, 0, 40)
@@ -130,6 +116,7 @@ copyFeedback.TextSize = 16
 -- Анимация появления
 TweenService:Create(frame, TweenInfo.new(0.5), {BackgroundTransparency = 0}):Play()
 
+-- Проверка ключа
 button.MouseButton1Click:Connect(function()
 	local input = box.Text:match("^%s*(.-)%s*$")
 	if input == validKey then
@@ -145,16 +132,17 @@ button.MouseButton1Click:Connect(function()
 	end
 end)
 
+-- Копировать ссылку
 getKeyButton.MouseButton1Click:Connect(function()
 	local link = "https://playerok.com/profile/MILEDI-STORE/products"
-	setclipboard(link)  -- копируем ссылку в буфер обмена
+	setclipboard(link)
 	copyFeedback.Text = "Ссылка скопирована"
-	
 	delay(2, function()
 		copyFeedback.Text = ""
 	end)
 end)
 
+-- Закрыть ESC
 UserInputService.InputBegan:Connect(function(input, gpe)
 	if not gpe and input.KeyCode == Enum.KeyCode.Escape then
 		gui:Destroy()
