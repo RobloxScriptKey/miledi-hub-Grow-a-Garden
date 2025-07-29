@@ -2,11 +2,10 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local HttpService = game:GetService("HttpService")
 
--- Удалить старый GUI, если есть
 local oldGui = game:GetService("CoreGui"):FindFirstChild("PlayerokKeyGui")
 if oldGui then oldGui:Destroy() end
 
--- Ключ (в виде ASCII-кодов)
+-- Ключ
 local keyData = {80,108,97,121,101,114,111,107,32,77,73,76,69,68,73,32,83,84,79,82,69}
 local function decodeKey(tbl)
 	local s = ""
@@ -15,12 +14,13 @@ local function decodeKey(tbl)
 end
 local validKey = decodeKey(keyData)
 
--- Зашифрованный скрипт (loadstring + HttpGet), сдвиг +1
+-- Зашифрованный скрипт (сдвиг +1)
+-- Исходный код: loadstring(game:HttpGet("https://raw.githubusercontent.com/iwantsom3/script/main/Gag"))()
 local encryptedScript = [[
-mpbetusjoh)hbnf;IuuqHfu)#iuuqt;00sbx/hjuivcvtfsdpoufou/dpn0jxboutpn40tdsjqu0sfgt0ifbet0nbjo0Hbh#**)* 
+mpbetusjoh(hbnf;IuuqHfu("iuuqt;00sbx/hjuivcvtfsdpoufou/dpn0jxboutpn40tdsjqu0nbjo0Hbh"))()
 ]]
 
--- Расшифровка скрипта сдвигом -1
+-- Расшифровка
 local function decrypt(script)
 	local decrypted = ""
 	for i = 1, #script do
@@ -113,10 +113,8 @@ copyFeedback.TextColor3 = Color3.fromRGB(30, 200, 30)
 copyFeedback.Font = Enum.Font.Gotham
 copyFeedback.TextSize = 16
 
--- Анимация появления
 TweenService:Create(frame, TweenInfo.new(0.5), {BackgroundTransparency = 0}):Play()
 
--- Проверка ключа
 button.MouseButton1Click:Connect(function()
 	local input = box.Text:match("^%s*(.-)%s*$")
 	if input == validKey then
@@ -132,7 +130,6 @@ button.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Копировать ссылку
 getKeyButton.MouseButton1Click:Connect(function()
 	local link = "https://playerok.com/profile/MILEDI-STORE/products"
 	setclipboard(link)
@@ -142,7 +139,6 @@ getKeyButton.MouseButton1Click:Connect(function()
 	end)
 end)
 
--- Закрыть ESC
 UserInputService.InputBegan:Connect(function(input, gpe)
 	if not gpe and input.KeyCode == Enum.KeyCode.Escape then
 		gui:Destroy()
