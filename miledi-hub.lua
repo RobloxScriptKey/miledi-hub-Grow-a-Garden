@@ -25,7 +25,7 @@ gui.ResetOnSpawn = false
 gui.Parent = game:GetService("CoreGui")
 
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 400, 0, 200)
+frame.Size = UDim2.new(0, 400, 0, 240) -- увеличил высоту, чтобы поместились 2 кнопки
 frame.Position = UDim2.new(0.5, 0, 0.4, 0)
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
 frame.BackgroundColor3 = Color3.fromRGB(120, 140, 255)
@@ -68,8 +68,8 @@ box.BackgroundColor3 = Color3.fromRGB(230, 230, 255)
 Instance.new("UICorner", box).CornerRadius = UDim.new(0, 12)
 
 local button = Instance.new("TextButton", frame)
-button.Size = UDim2.new(0.5, 0, 0, 40)
-button.Position = UDim2.new(0.25, 0, 0, 160)
+button.Size = UDim2.new(0.8, 0, 0, 40)
+button.Position = UDim2.new(0.1, 0, 0, 160)
 button.BackgroundColor3 = Color3.fromRGB(160, 200, 255)
 button.Font = Enum.Font.GothamBold
 button.TextSize = 20
@@ -77,10 +77,9 @@ button.TextColor3 = Color3.fromRGB(30, 30, 30)
 button.Text = "Проверить"
 Instance.new("UICorner", button).CornerRadius = UDim.new(0, 12)
 
--- Добавляем новую кнопку "Получить ключ"
 local getKeyButton = Instance.new("TextButton", frame)
-getKeyButton.Size = UDim2.new(0.5, 0, 0, 40)
-getKeyButton.Position = UDim2.new(0.75, 10, 0, 160)
+getKeyButton.Size = UDim2.new(0.8, 0, 0, 40)
+getKeyButton.Position = UDim2.new(0.1, 0, 0, 210)
 getKeyButton.BackgroundColor3 = Color3.fromRGB(160, 200, 255)
 getKeyButton.Font = Enum.Font.GothamBold
 getKeyButton.TextSize = 20
@@ -88,10 +87,18 @@ getKeyButton.TextColor3 = Color3.fromRGB(30, 30, 30)
 getKeyButton.Text = "Получить ключ"
 Instance.new("UICorner", getKeyButton).CornerRadius = UDim.new(0, 12)
 
--- Надпись для уведомления о копировании
+local feedback = Instance.new("TextLabel", frame)
+feedback.Size = UDim2.new(1, 0, 0, 20)
+feedback.Position = UDim2.new(0, 0, 0, 145)
+feedback.BackgroundTransparency = 1
+feedback.Text = ""
+feedback.TextColor3 = Color3.new(1, 1, 1)
+feedback.Font = Enum.Font.Gotham
+feedback.TextSize = 18
+
 local copyFeedback = Instance.new("TextLabel", frame)
-copyFeedback.Size = UDim2.new(0, 150, 0, 20)
-copyFeedback.Position = UDim2.new(0.75, 10, 0, 140)
+copyFeedback.Size = UDim2.new(1, 0, 0, 20)
+copyFeedback.Position = UDim2.new(0, 0, 0, 255)
 copyFeedback.BackgroundTransparency = 1
 copyFeedback.Text = ""
 copyFeedback.TextColor3 = Color3.fromRGB(30, 200, 30)
@@ -101,7 +108,6 @@ copyFeedback.TextSize = 16
 -- Анимация появления
 TweenService:Create(frame, TweenInfo.new(0.5), {BackgroundTransparency = 0}):Play()
 
--- Кнопка "Проверить"
 button.MouseButton1Click:Connect(function()
 	local input = box.Text:match("^%s*(.-)%s*$")
 	if input == validKey then
@@ -116,27 +122,15 @@ button.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Кнопка "Получить ключ"
 getKeyButton.MouseButton1Click:Connect(function()
 	local link = "https://playerok.com/profile/MILEDI-STORE/products"
-	setclipboard(link)  -- копирует ссылку в буфер обмена
+	setclipboard(link)  -- копируем ссылку в буфер обмена
 	copyFeedback.Text = "Ссылка скопирована"
 	
-	-- Очистить сообщение через 2 секунды
 	delay(2, function()
 		copyFeedback.Text = ""
 	end)
 end)
-
--- Текст для обратной связи проверки ключа
-local feedback = Instance.new("TextLabel", frame)
-feedback.Size = UDim2.new(1, 0, 0, 20)
-feedback.Position = UDim2.new(0, 0, 0, 145)
-feedback.BackgroundTransparency = 1
-feedback.Text = ""
-feedback.TextColor3 = Color3.new(1, 1, 1)
-feedback.Font = Enum.Font.Gotham
-feedback.TextSize = 18
 
 UserInputService.InputBegan:Connect(function(input, gpe)
 	if not gpe and input.KeyCode == Enum.KeyCode.Escape then
