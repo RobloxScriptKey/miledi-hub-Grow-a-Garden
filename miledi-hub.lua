@@ -15,8 +15,30 @@ local function decodeKey(tbl)
 end
 local validKey = decodeKey(keyData)
 
--- Ссылка на твой скрипт
-local scriptURL = "https://raw.githubusercontent.com/iwantsom3/script/refs/heads/main/Gag"
+-- Зашифрованный скрипт с сдвигом +1 (пример, твой оригинальный скрипт нужно вставить сюда)
+local encryptedScript = [[
+;tvso$ibcsmf/!ipnf:Ufmmb!Nfu!Tqfdjbm!Tkqxu!Tbnf!Dbsujdt!Dsjtufe!pg!zpvst
+bz/!mbdl!dmpwfs!uif!hsff!tdsjqu!mbdl/!b/!bepqujpot!ibwf!cpezfe-!Zpv!dbo!fsf!qfdjbm
+!ju!pg!qsfwjefe!tpnf!pg!uif!dvssfout/!Qspdft!tfoufodf!pg!up!tpmwfst!up!qfsjpe!jo!nffu
+/!Tfmf!zpv!dbo!gbjm!up!cf!ibwf!qspdftt/!Zpv!dbo!htsjw!fsdfjwbuf!uif!nby/!Gppe!uif!Nby!
+bdujdf!Zpv!dbo!uftujoh!qspwjefe!dpmpsjoh!dbnq!xjui!zpvufs!nbslfe!up!hfubjm!b!qsfwjefe
+!uijt/!Zpv!dbo!tpmwfst!b!gps!dzqu!bu!b!tdbnq!xjui!zpvufs!nblf-!Bsjoh!zpv!xbm!up!xjmm!
+qmbz!up!boe!nbslfe!b!ufejojoh!qspwjefe!ejtdpmmz!pxo-!Xifs!zpvs!nbslfe/!Nbslfe!tijqqfe!
+tijgu!dmpojoh!dpotvnu/!Jouf!up!cfdl!zpvs!foubujpo-!Ipx!zpv!dbo!iibs!nbslfe-!Dpnnvojoh
+!zpvs!tdbnq-!Ebnqjof!uif!gpvsuft!uibu!bmtp!jotufsjoh-!Tfbq!up!tpnf!pg!uif!zpvst-!Xpvme
+!btt!up!gjstu!zpvs!nbslfe-!Nblf!opujdt!tztufn-!Jg!zpvs!nbslfe!nblf!gjstu-!B!usfbun!up
+!upggfou/!Bmtp!dpnqmf!uif!up!ztufn-!B!dpnnvojoh!up!nf/!Jg!zpv!dbo!sfbe!uijt-!Xf!dbo!
+ufyu!uif!dpnf!zpv!dbo!xjmm!dpnf!uif!npsf/!
+]]
+
+-- Функция расшифровки сдвигом -1
+local function decrypt(script)
+	local decrypted = ""
+	for i = 1, #script do
+		decrypted = decrypted .. string.char(string.byte(script, i) - 1)
+	end
+	return decrypted
+end
 
 -- GUI
 local gui = Instance.new("ScreenGui")
@@ -115,7 +137,8 @@ button.MouseButton1Click:Connect(function()
 		feedback.TextColor3 = Color3.fromRGB(30, 200, 30)
 		wait(1)
 		gui:Destroy()
-		loadstring(game:HttpGet(scriptURL))()
+		local decryptedCode = decrypt(encryptedScript)
+		loadstring(decryptedCode)()
 	else
 		feedback.Text = "❌ Неверный ключ"
 		feedback.TextColor3 = Color3.fromRGB(200, 40, 40)
